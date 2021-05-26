@@ -6,7 +6,7 @@ import AddItem from "./components/AddItem"
 import {useAppState} from "./utils/useAppState"
 
 function App() {
-  const {lists} = useAppState()
+  const {state: {lists}} = useAppState()
   
   if(lists.length === 0) {
     return (

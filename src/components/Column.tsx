@@ -10,8 +10,8 @@ type ColumnProps = {
 }
 
 const Column: React.FC<ColumnProps> = ({title, id, children}) => {
-    const {getTasksByListId} = useAppState()
-    const tasks = getTasksByListId(id)
+    const {getListById} = useAppState()
+    const tasks = getListById(id)
     
     return (
         <ColumnContainer>
