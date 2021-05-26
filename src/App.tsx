@@ -1,15 +1,26 @@
-import React from 'react';
+import React, {useContext, Fragment} from 'react';
 import {AppContainer} from "./styles/styles"
 import Column from "./components/Column"
 import Card from "./components/Card"
 import AddItem from "./components/AddItem"
+import {useAppState} from "./utils/useAppState"
 
 function App() {
+  const {state: {lists}} = useAppState()
+  
+  if(lists.length === 0) {
+    return (
+      <AppContainer>
+        <AddItem buttonText="+ Add new list" dark onAdd={(task) => console.log(task)}/>
+      </AppContainer>
+    )
+  }
+
   return (
     <AppContainer>
-      <Column title="List 1">
-        <Card title="Get started with TS/React" />
-      </Column>
+      {lists.map(list => (
+        <Column title={list.text} key={list.id} id={list.id}/>
+      ))}    
       <AddItem buttonText="+ Add new list" dark onAdd={(task) => console.log(task)}/>
     </AppContainer>
   );
