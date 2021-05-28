@@ -15,7 +15,7 @@ export const AppStateContext = createContext<AppStateContextProps>({} as AppStat
 export const AppStateProvider: FC = ({children}) => {
     const [state, dispatch] = useReducer(appReducer, appData);
 
-    const getListById = (id: string) => state.lists.filter(task => task.id === id) 
+    const getListById = (id: string) => state.lists.find(list => list.id === id)?.tasks || []
 
     return (
         <AppStateContext.Provider value={{state, dispatch, getListById}}>

@@ -4,14 +4,15 @@ import Column from "./components/Column"
 import Card from "./components/Card"
 import AddItem from "./components/AddItem"
 import {useAppState} from "./utils/useAppState"
+import {addList} from "./state/appStateActions"
 
 function App() {
-  const {state: {lists}} = useAppState()
+  const {state: {lists}, dispatch} = useAppState()
   
   if(lists.length === 0) {
     return (
       <AppContainer>
-        <AddItem buttonText="+ Add new list" dark onAdd={(task) => console.log(task)}/>
+        <AddItem buttonText="+ Add new list" dark onAdd={(task) => dispatch(addList(task))}/>
       </AppContainer>
     )
   }
@@ -21,7 +22,7 @@ function App() {
       {lists.map(list => (
         <Column title={list.text} key={list.id} id={list.id}/>
       ))}    
-      <AddItem buttonText="+ Add new list" dark onAdd={(task) => console.log(task)}/>
+      <AddItem buttonText="+ Add new list" dark onAdd={(task) => dispatch(addList(task))}/>
     </AppContainer>
   );
 }

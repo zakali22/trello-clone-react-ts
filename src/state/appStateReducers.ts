@@ -1,6 +1,7 @@
 import {Action} from "./appStateActions"
 import {ADD_LIST, ADD_TASK} from "./actionTypes"
 import {uuid} from "uuidv4"
+import {findListById} from "../utils/arrayUtils"
 
 // App State type
 export type Task = {
@@ -32,10 +33,10 @@ export function appReducer(state: AppState, action: Action){
             }
             break;
         case ADD_TASK:
-            const listNewTask = state.lists.map(list => {
-                if(list.id === action.payload.listId){
+            const listWithNewTask = state.lists.map(list => {
+                if(list.id === action.payload.listId) {
                     return {
-                        ...list,
+                        ...list, 
                         tasks: [...list.tasks, {id: uuid(), text: action.payload.text}]
                     }
                 } else {
@@ -45,7 +46,7 @@ export function appReducer(state: AppState, action: Action){
 
             return {
                 ...state, 
-                lists: [...listNewTask]
+                lists: listWithNewTask
             }
         default: 
             return state
