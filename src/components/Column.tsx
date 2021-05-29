@@ -6,6 +6,7 @@ import {useAppState} from "../utils/useAppState"
 import {addTask, moveItem} from "../state/appStateActions"
 import {useDragItem} from "../utils/useDragItem"
 import {useDropItem} from "../utils/useDropItem"
+import {isHidden} from "../utils/isHidden"
 
 type ColumnProps = {
     id: string,
@@ -13,7 +14,7 @@ type ColumnProps = {
 }
 
 const Column: React.FC<ColumnProps> = ({title, id, children}) => {
-    const {getListById, dispatch} = useAppState()
+    const {state: {draggedItem}, getListById, dispatch} = useAppState()
     const {drag} = useDragItem({type: "COLUMN", id})
     const {drop} = useDropItem({type: "COLUMN", id})
     const ref = useRef<HTMLDivElement>(null)
@@ -22,7 +23,7 @@ const Column: React.FC<ColumnProps> = ({title, id, children}) => {
     drag(drop(ref))
     
     return (
-        <ColumnContainer ref={ref}>
+        <ColumnContainer ref={ref} isHidden={isHidden(draggedItem, "COLUMN", id)}>
             <ColumnTitle>{title}</ColumnTitle>
             {tasks.map(task => (
                 <Card key={task.id} id={task.id} title={task.text} />
