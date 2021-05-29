@@ -1,9 +1,11 @@
-import React from "react"
+import React, {useRef} from "react"
 import {ColumnContainer, ColumnTitle} from "../styles/styles"
 import AddItem from "./AddItem"
 import Card from "./Card"
 import {useAppState} from "../utils/useAppState"
-import {addTask} from "../state/appStateActions"
+import {addTask, moveItem} from "../state/appStateActions"
+import {useDragItem} from "../utils/useDragItem"
+import {useDropItem} from "../utils/useDropItem"
 
 type ColumnProps = {
     id: string,
@@ -12,12 +14,15 @@ type ColumnProps = {
 
 const Column: React.FC<ColumnProps> = ({title, id, children}) => {
     const {getListById, dispatch} = useAppState()
+    const {drag} = useDragItem({type: "COLUMN", id})
+    const {drop} = useDropItem({type: "COLUMN", id})
+    const ref = useRef<HTMLDivElement>(null)
     const tasks = getListById(id)
 
-    console.log(tasks)
+    drag(drop(ref))
     
     return (
-        <ColumnContainer>
+        <ColumnContainer ref={ref}>
             <ColumnTitle>{title}</ColumnTitle>
             {tasks.map(task => (
                 <Card key={task.id} id={task.id} title={task.text} />

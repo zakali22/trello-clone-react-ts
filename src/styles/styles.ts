@@ -18,6 +18,7 @@ export const ColumnContainer = styled.div`
     margin-right: 20px;
     border-radius: 3px;
     padding: 8px;
+    cursor: pointer;
 `
 
 export const ColumnTitle = styled.div`
