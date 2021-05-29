@@ -10,20 +10,21 @@ import {isHidden} from "../utils/isHidden"
 
 type ColumnProps = {
     id: string,
-    title: string
+    title: string | undefined,
+    isPreview?: boolean 
 }
 
-const Column: React.FC<ColumnProps> = ({title, id, children}) => {
+const Column: React.FC<ColumnProps> = ({title, id, children, isPreview}) => {
     const {state: {draggedItem}, getListById, dispatch} = useAppState()
-    const {drag} = useDragItem({type: "COLUMN", id})
-    const {drop} = useDropItem({type: "COLUMN", id})
+    const {drag} = useDragItem({type: "COLUMN", id, text: title})
+    const {drop} = useDropItem({type: "COLUMN", id, text: title})
     const ref = useRef<HTMLDivElement>(null)
     const tasks = getListById(id)
 
     drag(drop(ref))
     
     return (
-        <ColumnContainer ref={ref} isHidden={isHidden(draggedItem, "COLUMN", id)}>
+        <ColumnContainer ref={ref} isHidden={isHidden(draggedItem, "COLUMN", id, isPreview)} isPreview={isPreview}>
             <ColumnTitle>{title}</ColumnTitle>
             {tasks.map(task => (
                 <Card key={task.id} id={task.id} title={task.text} />

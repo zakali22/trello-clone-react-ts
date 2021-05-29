@@ -5,6 +5,7 @@ import Card from "./components/Card"
 import AddItem from "./components/AddItem"
 import {useAppState} from "./utils/useAppState"
 import {addList} from "./state/appStateActions"
+import {CustomDragLayer} from "./components/CustomDragLayer"
 
 function App() {
   const {state: {lists}, dispatch} = useAppState()
@@ -19,6 +20,7 @@ function App() {
 
   return (
     <AppContainer>
+      <CustomDragLayer />
       {lists.map(list => (
         <Column title={list.text} key={list.id} id={list.id}/>
       ))}    
