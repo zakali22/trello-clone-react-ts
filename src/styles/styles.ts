@@ -8,9 +8,17 @@ export const AppContainer = styled.div`
     width: 100vw;
     background-color: #3179ba;
     padding: 20px;
+`;
+
+type DragItemContainerProps = {
+    isHidden?: boolean
+}
+
+export const DragItemContainer = styled.div<DragItemContainerProps>`
+    opacity: ${props => props.isHidden ? '0.5' : '1'}
 `
 
-export const ColumnContainer = styled.div`
+export const ColumnContainer = styled(DragItemContainer)`
     flex: 0 0 auto;
     background-color: #ebecf0;
     width: 300px;
@@ -26,7 +34,7 @@ export const ColumnTitle = styled.div`
     font-weight: bold;
 `
 
-export const CardContainer = styled.div`
+export const CardContainer = styled(DragItemContainer)`
     margin-bottom: 0.5rem;
     padding: 0.5rem 1rem;
     max-width: 300px;
@@ -78,4 +86,4 @@ export const NewItemInput = styled.input`
     margin-bottom: 0.5rem;
     padding: 0.5rem 1rem;
     width: 100%;
-`
+`;
