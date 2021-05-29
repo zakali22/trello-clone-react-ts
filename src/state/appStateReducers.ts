@@ -1,7 +1,8 @@
 import {Action} from "./appStateActions"
-import {ADD_LIST, ADD_TASK} from "./actionTypes"
+import {ADD_LIST, ADD_TASK, MOVE_ITEM, SET_DRAGGED_ITEM} from "./actionTypes"
 import {uuid} from "uuidv4"
-import {findListById} from "../utils/arrayUtils"
+import {findListById, moveItem} from "../utils/arrayUtils"
+import {DragItem} from "./types/DragItem"
 
 // App State type
 export type Task = {
@@ -16,11 +17,13 @@ export type List = {
 }
 
 export type AppState = {
-    lists: List[]
+    lists: List[],
+    draggedItem: DragItem | null
 }
 
 export const appData: AppState = {
-    lists: []
+    lists: [],
+    draggedItem: null
 }
 
 export function appReducer(state: AppState, action: Action){
@@ -47,6 +50,21 @@ export function appReducer(state: AppState, action: Action){
             return {
                 ...state, 
                 lists: listWithNewTask
+            }
+            break;
+        case SET_DRAGGED_ITEM: 
+            return {
+                ...state, 
+                draggedItem: action.payload.draggedItem
+            }
+            break;
+        case MOVE_ITEM: 
+            const draggedItemId = state.lists.findIndex(list => list.id === action.payload.draggedItemId)
+            const hoverItemId = state.lists.findIndex(list => list.id === action.payload.hoverItemId)   
+
+            return {
+                ...state,
+                lists: moveItem(state.lists, draggedItemId, hoverItemId)
             }
         default: 
             return state
