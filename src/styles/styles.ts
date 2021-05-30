@@ -11,12 +11,27 @@ export const AppContainer = styled.div`
 `;
 
 type DragItemContainerProps = {
-    isHidden?: boolean
+    isHidden?: boolean,
+    isPreview?: boolean
 }
 
 export const DragItemContainer = styled.div<DragItemContainerProps>`
-    opacity: ${props => props.isHidden ? '0.5' : '1'}
-`
+    opacity: ${props => props.isHidden ? '0.5' : '1'};
+    transform: ${props => props.isPreview ? 'rotate(5deg)' : 'none'}
+`;
+
+type DragPreviewLayerProps = {
+    position: {
+        x: number, 
+        y: number
+    }
+}
+// Pass as inline style (since styled components creates a class each time which will be heavy)
+export const DragPreviewLayer = styled.div.attrs<DragPreviewLayerProps>(({position: {x, y}}) => ({
+    style: {
+        transform: `translate(${x}px, ${y}px)`
+    }
+}))<DragPreviewLayerProps>``
 
 export const ColumnContainer = styled(DragItemContainer)`
     flex: 0 0 auto;
@@ -87,3 +102,13 @@ export const NewItemInput = styled.input`
     padding: 0.5rem 1rem;
     width: 100%;
 `;
+
+export const CustomDragLayerContainer = styled.div`
+    height: 100%;
+    width: 100%;
+    position: fixed;
+    pointer-events: none;
+    top: 0;
+    left: 0;
+    z-index: 100;
+`
