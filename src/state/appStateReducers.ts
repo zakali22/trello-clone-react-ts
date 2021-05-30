@@ -1,7 +1,7 @@
 import {Action} from "./appStateActions"
-import {ADD_LIST, ADD_TASK, MOVE_ITEM, SET_DRAGGED_ITEM} from "./actionTypes"
+import {ADD_LIST, ADD_TASK, MOVE_ITEM, SET_DRAGGED_ITEM, MOVE_CARD} from "./actionTypes"
 import {uuid} from "uuidv4"
-import {findListById, moveItem} from "../utils/arrayUtils"
+import {findListById, moveItem, mergeObjectsInUnique} from "../utils/arrayUtils"
 import {DragItem} from "./types/DragItem"
 
 // App State type
@@ -66,6 +66,39 @@ export function appReducer(state: AppState, action: Action){
                 ...state,
                 lists: moveItem(state.lists, draggedItemId, hoverItemId)
             }
+            break;
+        case MOVE_CARD:
+            let sourceListId = state.lists.findIndex(list => list.id === action.payload.sourceListId)
+            let targetListId = state.lists.findIndex(list => list.id === action.payload.targetListId)
+            const draggedCardId = state.lists[sourceListId].tasks.findIndex(task => task.id === action.payload.draggedCardId)
+            const cardItem = state.lists[sourceListId].tasks[draggedCardId]
+
+            console.log(sourceListId, targetListId)
+            
+            let listMerged = state.lists.map(list => {
+                if(list.id === action.payload.targetListId && cardItem){
+                    console.log("From target")
+                    return {
+                        ...list,
+                        tasks: [...list.tasks, cardItem]
+                    }
+                } else if(list.id ===  action.payload.sourceListId){
+                    console.log("From source")
+                    return {
+                        ...list,
+                        tasks: list.tasks.filter(task => task.id !== action.payload.draggedCardId)
+                    }
+                } else {
+                    return list
+                }
+            })
+            
+
+            return {
+                ...state,
+                lists: listMerged
+            }
+            break;
         default: 
             return state
     }

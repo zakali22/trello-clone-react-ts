@@ -22,3 +22,23 @@ export const moveItem = <TItem>(array: TItem[], from: number, to: number) => {
 
     return insertItemAtIndex(removeItemAtIndex(array, from), item, to)
 }
+
+
+/** Move a card within a column or to another column */
+// export const moveCard = <TItem>(array: TItem[], targetListId: number, sourceListId: number, itemId: number) => {
+//     const taskItem = array[targetListId].tasks[itemId]
+
+// }
+
+
+export function mergeObjectsInUnique<T>(array: T[], property: any): T[] {
+
+    const newArray = new Map();
+
+    array.forEach((item: any) => {
+        const propertyValue = item[property];
+        newArray.has(propertyValue) ? newArray.set(propertyValue, { ...item, ...newArray.get(propertyValue) }) : newArray.set(propertyValue, item);
+    });
+
+    return Array.from(newArray.values());
+}
