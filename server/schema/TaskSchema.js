@@ -3,8 +3,7 @@ const Schema = mongoose.Schema;
 
 const TaskSchema = new Schema({
     text: {
-        type: String,
-        required: true
+        type: String
     }
 }, {timestamps: true})
 

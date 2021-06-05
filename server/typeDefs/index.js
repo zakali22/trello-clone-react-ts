@@ -1,4 +1,6 @@
-exports.typeDefs = `
+const { gql } = require('apollo-server-express');
+
+exports.typeDefs = gql`
 
     type Task {
         _id: ID
@@ -14,7 +16,6 @@ exports.typeDefs = `
     input ListInput {
         _id: ID
         text: String
-        tasks: [Task]
     }
 
     input TaskInput {
@@ -24,15 +25,13 @@ exports.typeDefs = `
 
     type Query {
         getAllLists: [List]
-        getList(listId: ListInput): List
-        getListTasks(listId: ListInput): [Task]
-        getListTask(listId: ListInput, taskId: TaskInput): Task
+        getList(list: ListInput): List
+        getListTasks(list: ListInput): [Task]
+        getListTask(list: ListInput, taskId: TaskInput): Task
     }
 
-    type Mutations {
+    type Mutation {
         addList(list: ListInput): [List]
         addTask(listId: ListInput, task: TaskInput): [Task]
     }
-
-
 `
