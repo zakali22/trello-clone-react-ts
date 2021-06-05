@@ -18,7 +18,7 @@ exports.resolvers = {
     },
 
     Mutation: {
-        addList: async (obj, {text}, context) => {
+        addList: async (obj, {list: {text}}, context) => {
             try {
                 await List.create({
                     text,
