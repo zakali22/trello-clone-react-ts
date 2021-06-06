@@ -1,14 +1,14 @@
-import {ADD_LIST, ADD_TASK} from "./actionTypes"
+import {ADD_LISTS, ADD_TASK} from "./actionTypes"
 import {DragItem} from "./types/DragItem"
 
 export type Action = 
-    {type: 'ADD_LIST', payload: {text: string}} | 
+    {type: 'ADD_LISTS', payload: {lists: []}} | 
     {type: 'ADD_TASK', payload: {listId: string, text: string}} | 
     {type: 'MOVE_ITEM', payload: {draggedItemId: string, hoverItemId: string }} |
     {type: 'MOVE_CARD', payload: {draggedCardId: string, sourceListId: string, targetListId: string}} |
     {type: 'SET_DRAGGED_ITEM', payload: {draggedItem: DragItem | null}} 
 
-export const addList = (text: string): Action => ({type: 'ADD_LIST', payload: {text}})
+export const addLists = (lists: []): Action => ({type: 'ADD_LISTS', payload: {lists}})
 
 export const addTask = (listId: string, text: string): Action => ({type: 'ADD_TASK', payload: {listId, text}})
 

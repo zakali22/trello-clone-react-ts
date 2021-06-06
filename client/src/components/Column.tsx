@@ -8,6 +8,8 @@ import {useDragItem} from "../utils/useDragItem"
 import {useDropItem} from "../utils/useDropItem"
 import {isHidden} from "../utils/isHidden"
 import {useDrop} from "react-dnd"
+import {GET_LIST_TASKS} from "../graphql/queries/getListTasks"
+import { useQuery } from "@apollo/client"
 
 type ColumnProps = {
     id: string,
@@ -16,10 +18,10 @@ type ColumnProps = {
 }
 
 const Column: React.FC<ColumnProps> = ({title, id, children, isPreview}) => {
-    const {state: {draggedItem}, getListById, dispatch} = useAppState()
+    const {state: {draggedItem}, dispatch} = useAppState()
     const {drag} = useDragItem({type: "COLUMN", id, text: title})
     const ref = useRef<HTMLDivElement>(null)
-    const tasks = getListById(id)
+    const {data, loading, error} = useQuery(GET_LIST_TASKS, {variables: {listId: id}})
 
     const [, drop] = useDrop({
         accept: ["COLUMN", "CARD"],
@@ -37,9 +39,9 @@ const Column: React.FC<ColumnProps> = ({title, id, children, isPreview}) => {
                     return;
                 }
 
-                if(tasks.length){
-                    return
-                }
+                // if(tasks.length){
+                //     return
+                // }
 
                 if(draggedItem.columnId === id) return
                 dispatch(moveCard(draggedItem.id, draggedItem.columnId, id))
@@ -50,15 +52,17 @@ const Column: React.FC<ColumnProps> = ({title, id, children, isPreview}) => {
     })
 
     drag(drop(ref))
-    
+
+    if(loading) return <p>Loading</p>
+    console.log(data)
     return (
         <ColumnContainer ref={ref} isHidden={isHidden(draggedItem, "COLUMN", id, isPreview)} isPreview={isPreview}>
             <ColumnTitle>{title}</ColumnTitle>
-            {tasks.length > 0 ? (
+            {/* {tasks.length > 0 ? (
                 tasks.map(task => (
                     <Card key={task.id} id={task.id} title={task.text} columnId={id}/>
                 ))
-            ) : null}
+            ) : null} */}
             <AddItem buttonText="+ Add new item" onAdd={(task) => dispatch(addTask(id, task))}/>
         </ColumnContainer>
     )

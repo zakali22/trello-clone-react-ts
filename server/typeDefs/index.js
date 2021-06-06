@@ -31,7 +31,7 @@ exports.typeDefs = gql`
     }
 
     type Mutation {
-        addList(list: ListInput): [List]
-        addTask(listId: ListInput, task: TaskInput): [Task]
+        addList(list: ListInput): List
+        addTask(list: ListInput, task: TaskInput): Task
     }
 `
