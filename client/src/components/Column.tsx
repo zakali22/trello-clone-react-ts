@@ -1,15 +1,17 @@
-import React, {useRef} from "react"
+import React, {useRef, useEffect} from "react"
 import {ColumnContainer, ColumnTitle} from "../styles/styles"
 import AddItem from "./AddItem"
 import Card from "./Card"
 import {useAppState} from "../utils/useAppState"
-import {addTask, moveItem, setDraggedItem, moveCard} from "../state/appStateActions"
+import {addTaskList, moveItem, setDraggedItem, moveCard} from "../state/appStateActions"
+import {Task} from "../state/appStateReducers"
 import {useDragItem} from "../utils/useDragItem"
 import {useDropItem} from "../utils/useDropItem"
 import {isHidden} from "../utils/isHidden"
 import {useDrop} from "react-dnd"
-import {GET_LIST_TASKS} from "../graphql/queries/getListTasks"
-import { useQuery } from "@apollo/client"
+import {GET_LIST} from "../graphql/queries/getList"
+import {ADD_TASK} from "../graphql/mutations/addTask"
+import { useMutation, useQuery } from "@apollo/client"
 
 type ColumnProps = {
     id: string,
@@ -21,7 +23,8 @@ const Column: React.FC<ColumnProps> = ({title, id, children, isPreview}) => {
     const {state: {draggedItem}, dispatch} = useAppState()
     const {drag} = useDragItem({type: "COLUMN", id, text: title})
     const ref = useRef<HTMLDivElement>(null)
-    const {data, loading, error} = useQuery(GET_LIST_TASKS, {variables: {listId: id}})
+    const {data, loading, error} = useQuery(GET_LIST, {variables: {listId: id}})
+    const [addTask] = useMutation(ADD_TASK)
 
     const [, drop] = useDrop({
         accept: ["COLUMN", "CARD"],
@@ -39,9 +42,9 @@ const Column: React.FC<ColumnProps> = ({title, id, children, isPreview}) => {
                     return;
                 }
 
-                // if(tasks.length){
-                //     return
-                // }
+                if(data.getList.tasks.length){
+                    return
+                }
 
                 if(draggedItem.columnId === id) return
                 dispatch(moveCard(draggedItem.id, draggedItem.columnId, id))
@@ -53,17 +56,36 @@ const Column: React.FC<ColumnProps> = ({title, id, children, isPreview}) => {
 
     drag(drop(ref))
 
+    useEffect(() => {
+        if(data){
+            console.log(data)
+            dispatch(addTaskList(id, data.getList))
+        }
+
+      }, [loading])
+
     if(loading) return <p>Loading</p>
-    console.log(data)
     return (
         <ColumnContainer ref={ref} isHidden={isHidden(draggedItem, "COLUMN", id, isPreview)} isPreview={isPreview}>
             <ColumnTitle>{title}</ColumnTitle>
-            {/* {tasks.length > 0 ? (
-                tasks.map(task => (
+            {data.getList.tasks.length > 0 ? (
+                data.getList.tasks.map((task: Task) => (
                     <Card key={task.id} id={task.id} title={task.text} columnId={id}/>
                 ))
-            ) : null} */}
-            <AddItem buttonText="+ Add new item" onAdd={(task) => dispatch(addTask(id, task))}/>
+            ) : null}
+            <AddItem buttonText="+ Add new item" onAdd={(task) => {
+                addTask({
+                    variables: {listId: id, text: task}, 
+                    refetchQueries: [{query: GET_LIST, variables: {listId: id}}],
+                    optimisticResponse: {
+                        addTask: {
+                            text: task,
+                            __typename: "Task",
+                            _id: "temp-id"
+                        }
+                    }
+                })
+            }}/>
         </ColumnContainer>
     )
 }

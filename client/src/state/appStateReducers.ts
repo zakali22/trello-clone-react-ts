@@ -38,8 +38,7 @@ export function appReducer(state: AppState, action: Action){
             const listWithNewTask = state.lists.map(list => {
                 if(list._id === action.payload.listId) {
                     return {
-                        ...list, 
-                        tasks: [...list.tasks, {id: uuid(), text: action.payload.text}]
+                        ...action.payload.newList
                     }
                 } else {
                     return list

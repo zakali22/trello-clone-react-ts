@@ -7,8 +7,8 @@ exports.resolvers = {
         getAllLists: async (obj, args, context) => {
             return await List.find({}).exec()
         },
-        getList: async (obj, args, context) => {
-            
+        getList: async (obj, {list: {_id}}, context) => {
+            return await List.findById(_id).exec()
         },
         getListTasks: async (obj, {list: {_id}}, context) => {
             const list = await List.findOne({_id}).select('tasks').exec()
@@ -43,7 +43,7 @@ exports.resolvers = {
                     })
 
                     await List.findByIdAndUpdate(_id, {$push: {tasks: task._id}}, {new: true})
-                    return task
+                    return await List.findById(_id)
                 } 
 
                 throw new Error("Cannot find that List")

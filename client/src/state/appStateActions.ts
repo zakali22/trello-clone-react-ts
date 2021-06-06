@@ -1,16 +1,17 @@
 import {ADD_LISTS, ADD_TASK} from "./actionTypes"
 import {DragItem} from "./types/DragItem"
+import {List} from "./appStateReducers"
 
 export type Action = 
     {type: 'ADD_LISTS', payload: {lists: []}} | 
-    {type: 'ADD_TASK', payload: {listId: string, text: string}} | 
+    {type: 'ADD_TASK', payload: {listId: string, newList: List}} | 
     {type: 'MOVE_ITEM', payload: {draggedItemId: string, hoverItemId: string }} |
     {type: 'MOVE_CARD', payload: {draggedCardId: string, sourceListId: string, targetListId: string}} |
     {type: 'SET_DRAGGED_ITEM', payload: {draggedItem: DragItem | null}} 
 
 export const addLists = (lists: []): Action => ({type: 'ADD_LISTS', payload: {lists}})
 
-export const addTask = (listId: string, text: string): Action => ({type: 'ADD_TASK', payload: {listId, text}})
+export const addTaskList = (listId: string, newList: List): Action => ({type: 'ADD_TASK', payload: {listId, newList}})
 
 export const moveItem = (draggedItemId: string, hoverItemId: string): Action => ({type: 'MOVE_ITEM', payload: {draggedItemId, hoverItemId}})
 
