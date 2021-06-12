@@ -1,4 +1,4 @@
-export const ADD_LIST = "ADD_LIST";
+export const ADD_LISTS = "ADD_LISTS";
 export const ADD_TASK = "ADD_TASK";
 export const MOVE_ITEM = "MOVE_ITEM";
 export const MOVE_CARD = "MOVE_CARD";
