@@ -14,6 +14,10 @@
     "type": "git",
     "url": "git+https://github.com/zakali22/trello-clone-react-ts.git"
   },
+  "engines": {
+    "node": "*",
+    "npm": "*"
+  },
   "author": "",
   "license": "ISC",
   "bugs": {
