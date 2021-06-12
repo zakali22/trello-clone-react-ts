@@ -2,6 +2,8 @@ import styled from "styled-components"
 
 export const AppContainer = styled.div`
     display: flex;
+    flex-wrap: wrap;
+    align-content: flex-start;
     align-items: flex-start;
     justify-content: flex-start;
     min-height: 100vh;
@@ -42,6 +44,7 @@ export const ColumnContainer = styled(DragItemContainer)`
     border-radius: 3px;
     padding: 8px;
     cursor: pointer;
+    margin-bottom: 20px
 `
 
 export const ColumnTitle = styled.div`
