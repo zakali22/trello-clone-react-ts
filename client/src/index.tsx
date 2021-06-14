@@ -11,7 +11,7 @@ import {ApolloProvider, ApolloClient, InMemoryCache} from "@apollo/client"
 // Create client to initialize and connect to React
 const client = new ApolloClient({
   cache: new InMemoryCache(),
-  uri: 'https://immense-plains-84537.herokuapp.com/graphql'
+  uri: 'http://localhost:4000/graphql'
 })
 
 

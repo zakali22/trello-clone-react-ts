@@ -6,7 +6,7 @@ import {DragItem} from "./types/DragItem"
 
 // App State type
 export type Task = {
-    id: string,
+    _id: string,
     text: string
 }
 
@@ -68,12 +68,13 @@ export function appReducer(state: AppState, action: Action){
         case MOVE_CARD:
             let sourceListId = state.lists.findIndex(list => list._id === action.payload.sourceListId)
             let targetListId = state.lists.findIndex(list => list._id === action.payload.targetListId)
-            const draggedCardId = state.lists[sourceListId].tasks.findIndex(task => task.id === action.payload.draggedCardId)
+            const draggedCardId = state.lists[sourceListId].tasks.findIndex(task => task._id === action.payload.draggedCardId)
             const cardItem = state.lists[sourceListId].tasks[draggedCardId]
 
-            console.log(sourceListId, targetListId)
+            console.log({...action.payload})
             
             let listMerged = state.lists.map(list => {
+                console.log(list)
                 if(list._id === action.payload.targetListId && cardItem){
                     console.log("From target")
                     return {
@@ -84,7 +85,7 @@ export function appReducer(state: AppState, action: Action){
                     console.log("From source")
                     return {
                         ...list,
-                        tasks: list.tasks.filter(task => task.id !== action.payload.draggedCardId)
+                        tasks: list.tasks.filter(task => task._id !== action.payload.draggedCardId)
                     }
                 } else {
                     return list

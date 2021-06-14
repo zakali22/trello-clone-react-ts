@@ -25,7 +25,7 @@ const server = new ApolloServer({
 server.applyMiddleware({ app }); 
 
 const corsOptions = {
-    origin: 'https://immense-plains-84537.herokuapp.com',
+    origin: 'http://localhost:3000',
     credentials: true
 }
 app.options('*', cors())
