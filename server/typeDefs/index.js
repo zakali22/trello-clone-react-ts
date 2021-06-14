@@ -16,6 +16,7 @@ exports.typeDefs = gql`
     input ListInput {
         _id: ID
         text: String
+        tasks: [TaskInput]
     }
 
     input TaskInput {
@@ -33,5 +34,6 @@ exports.typeDefs = gql`
     type Mutation {
         addList(list: ListInput): List
         addTask(list: ListInput, task: TaskInput): List
+        updateList(lists: [ListInput]): [List]
     }
 `

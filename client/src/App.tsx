@@ -43,7 +43,14 @@ function App() {
 
   useEffect(() => {
     if(data){
-        dispatch(addLists(data.getAllLists))
+      let newList = data.getAllLists.map(({_id, text, tasks}: any) => {
+        return {
+          _id,
+          text,
+          tasks
+        }
+      })
+        dispatch(addLists(newList))
     }
 
     return () => {
@@ -65,7 +72,7 @@ function App() {
     <AppContainer>
       <CustomDragLayer />
       {lists.map(list => (
-        <Column title={list.text} key={list._id} id={list._id}/>
+        <Column title={list.text} key={list._id} id={list._id} tasks={list.tasks}/>
       ))}    
       <AddItem buttonText="+ Add new list" dark onAdd={(task) => handleAddList(task)}/>
     </AppContainer>

@@ -50,6 +50,16 @@ exports.resolvers = {
             } catch(e){
                 console.log(e)
             }
+        },
+        updateList: async (obj, {lists}, context) => {
+            try {
+                console.log(lists)
+                const listsArr = lists.forEach(async (list) => {
+                    await List.findOneAndUpdate({_id: list._id}, {tasks: list.tasks}, {new: true})
+                })
+            } catch(e){
+                console.log(e)
+            }
         }
     },
     List: {
